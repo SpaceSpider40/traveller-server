@@ -1,6 +1,6 @@
 package com.space.travellerserver.repositiory;
 
-import com.space.travellerserver.entity.User;
+import com.space.travellerserver.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,11 +1,10 @@
 package com.space.travellerserver.auth;
 
-import com.space.travellerserver.entity.Role;
-import com.space.travellerserver.entity.User;
+import com.space.travellerserver.entity.user.Role;
+import com.space.travellerserver.entity.user.User;
 import com.space.travellerserver.repositiory.UserRepository;
 import com.space.travellerserver.service.JWTService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ProblemDetail;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

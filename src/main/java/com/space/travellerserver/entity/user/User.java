@@ -1,4 +1,4 @@
-package com.space.travellerserver.entity;
+package com.space.travellerserver.entity.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
