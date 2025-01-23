@@ -8,28 +8,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.space.travellerserver.dto.TripDto;
 import com.space.travellerserver.entity.trip.Trip;
-import com.space.travellerserver.repositiory.trip.TripRepository;
+import com.space.travellerserver.service.TripService;
+
+import lombok.AllArgsConstructor;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/trip")
 public class TripController {
 
-    private final TripRepository tripRepository;
+    private final TripService tripService;
 
-    public TripController(TripRepository tripRepository){
-        this.tripRepository = tripRepository;
-    }
-    
-    @PostMapping("/add")
-    public void add(@RequestBody Trip trip){
-        tripRepository.save(trip);
+    @PostMapping("/")
+    public void add(@RequestBody TripDto trip){
+        tripService.createTrip(trip);
     }
 
     @GetMapping("/")
     public List<Trip> all(){
-        return tripRepository.findAll();
+        return tripService.getTrips();
     }
-
+    
     
 }

@@ -14,10 +14,12 @@ import lombok.*;
 import java.util.Date;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.space.travellerserver.entity.attendee.Attendee;
 import com.space.travellerserver.entity.user.User;
 
-@Setter
-@Getter
+@Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,7 +45,10 @@ public class Trip {
     @Column(nullable = false)
     private Date lastDay;
 
-    @OneToMany(mappedBy = "trip")
-    Set<Attedee> attendies;
+    @Column(nullable = false)
+    private TripStatus tripStatus;
 
+    @OneToMany(mappedBy = "trip")
+    @JsonIgnoreProperties("trip")
+    Set<Attendee> attendees;
 }
