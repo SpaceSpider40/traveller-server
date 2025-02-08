@@ -8,9 +8,9 @@ import org.springframework.lang.NonNull;
 
 import java.util.Optional;
 
-public interface TripRepository extends JpaRepository<Trip, Integer> {
+public interface TripRepository extends JpaRepository<Trip, Long> {
     @NonNull
-    Optional<Trip> findById(@NonNull Integer id);
+    Optional<Trip> findById(@NonNull Long id);
 
     
 }

@@ -1,12 +1,17 @@
 package com.space.travellerserver.service;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.space.travellerserver.dto.TripDto;
+import com.space.travellerserver.dto.trip.TripAddAttendeeDto;
+import com.space.travellerserver.dto.trip.TripCreationDto;
+import com.space.travellerserver.entity.attendee.Attendee;
 import com.space.travellerserver.entity.trip.Trip;
 import com.space.travellerserver.entity.trip.TripStatus;
+import com.space.travellerserver.entity.user.User;
 import com.space.travellerserver.repositiory.UserRepository;
 import com.space.travellerserver.repositiory.trip.TripRepository;
 
@@ -24,7 +29,7 @@ public class TripService {
         return tripRepository.findAll();
     }
 
-    public void createTrip(TripDto tripDto){
+    public Trip createTrip(TripCreationDto tripDto){
         // create a new Trip entity and save it to the database
 
         Trip trip = Trip.builder()
@@ -34,9 +39,37 @@ public class TripService {
                     .firstDay(tripDto.getFirstDay())
                     .lastDay(tripDto.getLastDay())
                     .tripStatus(TripStatus.PLANNED)
+                    .creationDate(Instant.now())
+                    .modificationDate(Instant.now())
                     .build();
 
         tripRepository.save(trip);
         tripRepository.flush();
+
+        return trip;
+    }
+
+    public Trip addAttendee(TripAddAttendeeDto dto) {
+        
+        Optional<User> userOption = userRepository.findById(dto.userId);
+        Optional<Trip> tripOption = tripRepository.findById(dto.tripId);
+
+        if(!userOption.isPresent() || !tripOption.isPresent()){
+            throw new IllegalArgumentException("User or Trip not found");
+        }
+
+        User user = userOption.get();
+        Trip trip = tripOption.get();
+
+        Attendee attendee = Attendee.builder()
+                .user(user)
+                .trip(trip)
+                .build();
+        
+        trip.getAttendees().add(attendee);
+        tripRepository.save(trip);
+        tripRepository.flush();
+
+        return trip;
     }
 }

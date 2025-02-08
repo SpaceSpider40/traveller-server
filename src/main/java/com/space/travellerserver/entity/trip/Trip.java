@@ -4,17 +4,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import lombok.*;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.space.travellerserver.entity.attendee.Attendee;
 import com.space.travellerserver.entity.user.User;
@@ -40,10 +35,16 @@ public class Trip {
     private String description;
 
     @Column(nullable = false)
-    private Date firstDay;
+    private Instant firstDay;
 
     @Column(nullable = false)
-    private Date lastDay;
+    private Instant lastDay;
+
+    @Column(nullable = false)
+    private Instant creationDate;
+
+    @Column(nullable = false)
+    private Instant modificationDate;
 
     @Column(nullable = false)
     private TripStatus tripStatus;

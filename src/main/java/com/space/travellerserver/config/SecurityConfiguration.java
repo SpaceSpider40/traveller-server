@@ -26,6 +26,8 @@ public class SecurityConfiguration {
                     auth
                             .requestMatchers("/api/v1/auth/**")
                             .permitAll()
+                            .requestMatchers("/error")
+                            .permitAll()
                             .anyRequest()
                             .authenticated();
                 })

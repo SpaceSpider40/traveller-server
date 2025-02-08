@@ -9,17 +9,17 @@ import java.security.Principal;
 @RestController
 public class HomeController {
 
-private final String HOME_VIEW_COUNT = "HOME_VIEW_COUNT";
+    private final String HOME_VIEW_COUNT = "HOME_VIEW_COUNT";
 
     @GetMapping("/")
-    public String home(Principal principal, HttpSession session){
+    public String home(Principal principal, HttpSession session) {
         incrementCount(session, HOME_VIEW_COUNT);
 
         return "Hallo " + principal.getName();
     }
 
     @GetMapping("/count")
-    public String count(HttpSession session){
+    public String count(HttpSession session) {
         return "HOME_VIEW_COUNT: " + session.getAttribute(HOME_VIEW_COUNT);
     }
 
