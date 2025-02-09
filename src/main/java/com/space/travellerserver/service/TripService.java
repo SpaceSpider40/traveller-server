@@ -13,6 +13,7 @@ import com.space.travellerserver.entity.trip.Trip;
 import com.space.travellerserver.entity.trip.TripStatus;
 import com.space.travellerserver.entity.user.User;
 import com.space.travellerserver.repositiory.UserRepository;
+import com.space.travellerserver.repositiory.trip.AttendeeRepository;
 import com.space.travellerserver.repositiory.trip.TripRepository;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class TripService {
 
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
+    private final AttendeeRepository attendeeRepository;
 
     public List<Trip> getTrips(){
         // get all trips from the database
@@ -65,6 +67,9 @@ public class TripService {
                 .user(user)
                 .trip(trip)
                 .build();
+
+        attendeeRepository.save(attendee);
+        attendeeRepository.flush();
         
         trip.getAttendees().add(attendee);
         tripRepository.save(trip);
