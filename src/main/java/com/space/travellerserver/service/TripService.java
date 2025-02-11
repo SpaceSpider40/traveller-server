@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import com.space.travellerserver.dto.trip.TripAddAttendeeDto;
 import com.space.travellerserver.dto.trip.TripCreationDto;
 import com.space.travellerserver.entity.attendee.Attendee;
+import com.space.travellerserver.entity.attendee.AttendeeStatus;
 import com.space.travellerserver.entity.trip.Trip;
 import com.space.travellerserver.entity.trip.TripStatus;
 import com.space.travellerserver.entity.user.User;
 import com.space.travellerserver.repositiory.UserRepository;
-import com.space.travellerserver.repositiory.trip.AttendeeRepository;
 import com.space.travellerserver.repositiory.trip.TripRepository;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +24,6 @@ public class TripService {
 
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
-    private final AttendeeRepository attendeeRepository;
 
     public List<Trip> getTrips(){
         // get all trips from the database
@@ -45,8 +44,7 @@ public class TripService {
                     .modificationDate(Instant.now())
                     .build();
 
-        tripRepository.save(trip);
-        tripRepository.flush();
+        tripRepository.saveAndFlush(trip);
 
         return trip;
     }
@@ -63,17 +61,19 @@ public class TripService {
         User user = userOption.get();
         Trip trip = tripOption.get();
 
+        if (user.getId() == trip.getOwner().getId()) {
+            throw new IllegalArgumentException("Owner cannot be an attendee");
+        }
+
         Attendee attendee = Attendee.builder()
                 .user(user)
                 .trip(trip)
+                .attendeeStatus(AttendeeStatus.INVITED)
                 .build();
 
-        attendeeRepository.save(attendee);
-        attendeeRepository.flush();
-        
         trip.getAttendees().add(attendee);
-        tripRepository.save(trip);
-        tripRepository.flush();
+
+        tripRepository.saveAndFlush(trip);
 
         return trip;
     }

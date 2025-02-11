@@ -9,6 +9,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.space.travellerserver.entity.trip.Trip;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -18,6 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
+@JsonIgnoreProperties({"password", "role", "enabled", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "authorities"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -58,4 +64,8 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("owner")
+    private List<Trip> trips;
 }
