@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.space.travellerserver.dto.trip.TripAddAttendeeDto;
+import com.space.travellerserver.dto.trip.TripAddRouteDto;
 import com.space.travellerserver.dto.trip.TripCreationDto;
 import com.space.travellerserver.entity.trip.Trip;
 import com.space.travellerserver.service.TripService;
@@ -18,7 +19,7 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/trip")
+@RequestMapping("/api/v1/trip")
 public class TripController {
 
     private final TripService tripService;
@@ -32,6 +33,12 @@ public class TripController {
     public ResponseEntity<Trip> addAttendee(@RequestBody TripAddAttendeeDto dto){
         return ResponseEntity.ok(tripService.addAttendee(dto));
     }
+
+    @PostMapping("/addRoute")
+    public ResponseEntity<Trip> postMethodName(@RequestBody TripAddRouteDto dto) {
+        return ResponseEntity.ok(tripService.addRoute(dto));
+    }
+    
 
     @GetMapping()
     public ResponseEntity<List<Trip>> all(){

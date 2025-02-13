@@ -66,4 +66,8 @@ public class Trip {
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("trip")
     final List<Attendee> attendees = new ArrayList<>();
+
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("trip")
+    final List<Route> routes = new ArrayList<>();
 }

@@ -7,12 +7,16 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.space.travellerserver.dto.trip.TripAddAttendeeDto;
+import com.space.travellerserver.dto.trip.TripAddRouteDto;
 import com.space.travellerserver.dto.trip.TripCreationDto;
+import com.space.travellerserver.entity.Icon;
 import com.space.travellerserver.entity.attendee.Attendee;
 import com.space.travellerserver.entity.attendee.AttendeeStatus;
+import com.space.travellerserver.entity.trip.Route;
 import com.space.travellerserver.entity.trip.Trip;
 import com.space.travellerserver.entity.trip.TripStatus;
 import com.space.travellerserver.entity.user.User;
+import com.space.travellerserver.repositiory.IconRepository;
 import com.space.travellerserver.repositiory.UserRepository;
 import com.space.travellerserver.repositiory.trip.TripRepository;
 
@@ -24,6 +28,7 @@ public class TripService {
 
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
+    private final IconRepository iconRepository;
 
     public List<Trip> getTrips(){
         // get all trips from the database
@@ -65,6 +70,13 @@ public class TripService {
             throw new IllegalArgumentException("Owner cannot be an attendee");
         }
 
+        trip.getAttendees().stream()
+                .filter(attendee -> attendee.getUser().getId() == user.getId())
+                .findAny()
+                .ifPresent(attendee -> {
+                    throw new IllegalArgumentException("User is already an attendee");
+                });
+
         Attendee attendee = Attendee.builder()
                 .user(user)
                 .trip(trip)
@@ -72,6 +84,35 @@ public class TripService {
                 .build();
 
         trip.getAttendees().add(attendee);
+
+        tripRepository.saveAndFlush(trip);
+
+        return trip;
+    }
+
+    public Trip addRoute(TripAddRouteDto dto) {
+        Optional<Trip> tripOption = tripRepository.findById(dto.getTripId());
+
+        if(!tripOption.isPresent()){
+            throw new IllegalArgumentException("Trip not found");
+        }
+
+        Trip trip = tripOption.get();
+
+        Route route = Route.builder()
+                        .trip(trip)
+                        .title(dto.getTitle())
+                        .description(dto.getDescription())
+                        .startDate(dto.getStartDate())
+                        .endDate(dto.getEndDate())
+                        .build();
+
+        Optional<Icon> iconOption = iconRepository.findByName(dto.getIconName());
+        if (iconOption.isPresent()) {
+            route.setIcon(iconOption.get());
+        }
+
+        trip.getRoutes().add(route);
 
         tripRepository.saveAndFlush(trip);
 
