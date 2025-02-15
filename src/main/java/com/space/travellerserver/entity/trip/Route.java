@@ -45,6 +45,9 @@ public class Route {
     private Instant startDate;
     private Instant endDate;
 
+    @Column(nullable = true)
+    private Float totalDistance;
+
     @OneToMany(mappedBy = "route", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnoreProperties("route")
     final List<RoutePart> parts = new ArrayList<>();

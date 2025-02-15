@@ -10,7 +10,6 @@ import lombok.Data;
 
 @Data
 public class TripAddRouteDto {
-    private Long tripId;
     private String title;
     private String description;
     private String iconName;
@@ -19,7 +18,6 @@ public class TripAddRouteDto {
     
     @JsonCreator
     public TripAddRouteDto(
-        @JsonProperty Long tripId,
         @JsonProperty String title,
         @JsonProperty String description,
         @JsonProperty String iconName,
@@ -31,7 +29,6 @@ public class TripAddRouteDto {
             throw new IllegalArgumentException("Invalid time zone ID");
         }
 
-        this.tripId = tripId;
         this.title = title;
         this.description = description;
         this.iconName = iconName;

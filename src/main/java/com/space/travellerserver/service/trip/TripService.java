@@ -1,4 +1,4 @@
-package com.space.travellerserver.service;
+package com.space.travellerserver.service.trip;
 
 import java.time.Instant;
 import java.util.List;
@@ -54,46 +54,10 @@ public class TripService {
         return trip;
     }
 
-    public Trip addAttendee(TripAddAttendeeDto dto) {
-        
-        Optional<User> userOption = userRepository.findById(dto.userId);
-        Optional<Trip> tripOption = tripRepository.findById(dto.tripId);
+    public Trip addRoute(Long tripId, TripAddRouteDto dto) {
+        Optional<Trip> tripOption = tripRepository.findById(tripId);
 
-        if(!userOption.isPresent() || !tripOption.isPresent()){
-            throw new IllegalArgumentException("User or Trip not found");
-        }
-
-        User user = userOption.get();
-        Trip trip = tripOption.get();
-
-        if (user.getId() == trip.getOwner().getId()) {
-            throw new IllegalArgumentException("Owner cannot be an attendee");
-        }
-
-        trip.getAttendees().stream()
-                .filter(attendee -> attendee.getUser().getId() == user.getId())
-                .findAny()
-                .ifPresent(attendee -> {
-                    throw new IllegalArgumentException("User is already an attendee");
-                });
-
-        Attendee attendee = Attendee.builder()
-                .user(user)
-                .trip(trip)
-                .attendeeStatus(AttendeeStatus.INVITED)
-                .build();
-
-        trip.getAttendees().add(attendee);
-
-        tripRepository.saveAndFlush(trip);
-
-        return trip;
-    }
-
-    public Trip addRoute(TripAddRouteDto dto) {
-        Optional<Trip> tripOption = tripRepository.findById(dto.getTripId());
-
-        if(!tripOption.isPresent()){
+        if(tripOption.isEmpty()){
             throw new IllegalArgumentException("Trip not found");
         }
 
@@ -108,9 +72,7 @@ public class TripService {
                         .build();
 
         Optional<Icon> iconOption = iconRepository.findByName(dto.getIconName());
-        if (iconOption.isPresent()) {
-            route.setIcon(iconOption.get());
-        }
+        iconOption.ifPresent(route::setIcon);
 
         trip.getRoutes().add(route);
 

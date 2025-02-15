@@ -26,6 +26,9 @@ public class RoutePart {
     @ManyToOne(targetEntity = Route.class)
     private Route route;
 
+    @Column(nullable = true)
+    private Float distance;
+
     @OneToMany(mappedBy = "routePart", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnoreProperties("routePart")
     private List<Waypoint> waypoints;
