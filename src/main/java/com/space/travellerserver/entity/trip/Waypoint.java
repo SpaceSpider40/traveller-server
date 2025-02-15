@@ -23,9 +23,13 @@ public class Waypoint {
     @OneToOne(targetEntity = Icon.class)
     private Icon icon;
 
-    @ManyToOne(targetEntity = RoutePart.class)
-    private RoutePart routePart;
+    @ManyToOne(targetEntity = Route.class)
+    private Route route;
 
     private double longitude;
     private double latitude;
+
+    public static float getDistance(Waypoint otherWaypoint){
+        return 0;
+    }
 }

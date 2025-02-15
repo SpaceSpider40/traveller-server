@@ -48,7 +48,6 @@ public class Route {
     @Column(nullable = true)
     private Float totalDistance;
 
-    @OneToMany(mappedBy = "route", orphanRemoval = true, cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("route")
-    final List<RoutePart> parts = new ArrayList<>();
+    @OneToMany(targetEntity = Waypoint.class, cascade = CascadeType.ALL, orphanRemoval = true)    
+    private final List<Waypoint> waypoints = new ArrayList<>();
 }

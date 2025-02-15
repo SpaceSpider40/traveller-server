@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.space.travellerserver.dto.trip.TripAddAttendeeDto;
 import com.space.travellerserver.dto.trip.TripAddRouteDto;
 import com.space.travellerserver.dto.trip.TripCreationDto;
-import com.space.travellerserver.dto.trip.route.RouteAddRoutePartDto;
 import com.space.travellerserver.entity.trip.Route;
-import com.space.travellerserver.entity.trip.RoutePart;
 import com.space.travellerserver.entity.trip.Trip;
+import com.space.travellerserver.entity.trip.Waypoint;
 import com.space.travellerserver.service.trip.RouteService;
 import com.space.travellerserver.service.trip.TripService;
 
@@ -49,11 +48,10 @@ public class TripController {
         return ResponseEntity.ok(tripService.addRoute(tripId, dto));
     }
 
-    @PostMapping("{tripId}/route/{routeId}/part/add")
-    public ResponseEntity<Route> addRoutePart(@PathVariable Long tripId, @PathVariable Long routeId, @RequestBody RouteAddRoutePartDto dto) {
-        return ResponseEntity.ok(routeService.addPart(tripId, routeId, dto));
+    @PostMapping("/{tripId}/route/{routeId}/waypoint")
+    public ResponseEntity<Route> addWaypoint(@PathVariable Long tripId, @PathVariable Long routeId, @RequestBody Waypoint waypoint){
+        return ResponseEntity.ok(routeService.addWaypoint(tripId, routeId, waypoint));
     }
-    
 
     @GetMapping()
     public ResponseEntity<List<Trip>> all(){
