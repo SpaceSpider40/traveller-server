@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@JsonIgnoreProperties({"routePart"})
+@JsonIgnoreProperties({"route"})
 public class Waypoint {
     @Id
     @GeneratedValue
@@ -28,8 +28,4 @@ public class Waypoint {
 
     private double longitude;
     private double latitude;
-
-    public static float getDistance(Waypoint otherWaypoint){
-        return 0;
-    }
 }
